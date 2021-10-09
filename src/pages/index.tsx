@@ -1,6 +1,12 @@
 import Head from 'next/head'
+import firebase from 'lib/firebase'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { GoogleAuthProvider, FacebookAuthProvider, signOut } from 'firebase/auth'
 
 const Home = () => {
+  const googleProvider = new GoogleAuthProvider()
+  const facebookProvider = new FacebookAuthProvider()
+  const [user, loading, error] = useAuthState(firebase.auth())
   return (
     <>
       <Head>
@@ -9,6 +15,10 @@ const Home = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <div className=''>QuranTeacherFinder</div>
+      <button onClick={() => firebase.auth().signInWithPopup(googleProvider)}>Signup google</button>
+      <button onClick={() => firebase.auth().signInWithPopup(facebookProvider)}>Signup facebook</button>
+      <button onClick={() => signOut(firebase.auth())}>Logout</button>
+      {user && JSON.stringify(user)}
     </>
   )
 }
