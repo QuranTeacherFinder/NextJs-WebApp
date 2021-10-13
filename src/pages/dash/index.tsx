@@ -1,11 +1,8 @@
 import { useAuth } from 'lib/context/auth'
-import { GetServerSideProps } from 'next'
-import { useRouter } from 'next/router'
-import axios from 'axios'
 
 const Dash = () => {
   //   const router = useRouter()
-  //   const { user } = useAuth()
+  const { user } = useAuth()
   //   const handleClick = async () => {
   //     const response: any = await axios.get('http://localhost:5000/auth/checkauth', {
   //       withCredentials: true,
@@ -15,7 +12,7 @@ const Dash = () => {
   //     })
   //   }
 
-  return <div>Dash </div>
+  return <div>{JSON.stringify(user)} </div>
 }
 
 // export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {

@@ -1,4 +1,4 @@
-## QuranTeacherFinder
+## QariFinder
 
 ## Getting Started
 
