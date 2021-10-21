@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useContext, createContext } from 'react'
-import firebase from 'lib/firebase'
+import firebase from 'lib/clients/firebase'
 import { GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth'
+import nookies from 'nookies'
+import { faunaClient } from 'lib/clients/fauna'
+import { Collection, Get } from 'faunadb'
 
 interface userContext {
   user: firebase.User
@@ -42,15 +45,29 @@ function useProvideAuth() {
   }
 
   useEffect(() => {
-    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+    const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
+        const token = await user.getIdToken()
+        // const dbUser = await faunaClient.query(Get(Collection('users'),))
         setUser(user)
+        nookies.set(undefined, 'firebaseAuthToken', token, { path: '/' })
       } else {
         setUser(false)
+        nookies.set(undefined, 'firebaseAuthToken', '', { path: '/' })
       }
     })
 
     return () => unsubscribe()
+  }, [])
+
+  useEffect(() => {
+    const handle = setInterval(async () => {
+      const user = firebase.auth().currentUser
+      if (user) await user.getIdToken(true)
+    }, 10 * 60 * 1000)
+
+    // clean up setInterval
+    return () => clearInterval(handle)
   }, [])
 
   return {

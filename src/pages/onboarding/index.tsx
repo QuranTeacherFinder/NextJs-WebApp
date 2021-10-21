@@ -4,16 +4,15 @@ import { BiRightArrowAlt } from 'react-icons/bi'
 import OnboardingLayout from 'components/layouts/OnBoardingLayout'
 import { useOnBoardingContext } from 'lib/context/onBoarding'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
+import { useAuth } from 'lib/context/auth'
 
 const Login = () => {
-  const router = useRouter()
-  const { setForm } = useOnBoardingContext()
-  const AccTypeHandler = (type: 'Teacher' | 'Parent' | 'Student' | null) => {
-    setForm({
-      accType: type
-    })
-    router.push('/onboarding/personal-info')
-  }
+  const { user, signinGoogle, signinFacebook, signout } = useAuth()
+  const { form, setForm } = useOnBoardingContext()
+  useEffect(() => {
+    setForm({ ...form, personalInfo: user })
+  }, [user])
   return (
     <>
       <Head>
@@ -21,13 +20,12 @@ const Login = () => {
         <meta name='description' content='Onboarding QariFinder' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      {/* <Button>Back</Button> */}
       <section className='flex-1 flex justify-center items-center gap-8'>
-        <Button onClick={() => AccTypeHandler('Teacher')}>Teacher</Button>
-        <Button onClick={() => AccTypeHandler('Parent')}>Parent</Button>
-        <Button onClick={() => AccTypeHandler('Student')}>Student</Button>
+        <Button onClick={() => signinGoogle()}>Signup google</Button>
+        {/* <Button onClick={() => signinFacebook()}>Signup facebook</Button> */}
+        {user && <pre className='text-sm'>{JSON.stringify(user.providerData, null, 2)}</pre>}
       </section>
-      <Link to='/onboarding/personal-info' className='self-center'>
+      <Link to='/onboarding/acc-type' className='self-center'>
         <BiRightArrowAlt className='w-14 h-14 text-primary'></BiRightArrowAlt>
       </Link>
     </>

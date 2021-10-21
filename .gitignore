@@ -32,3 +32,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# firsebase
+/firebaseAdmin.json

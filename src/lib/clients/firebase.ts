@@ -14,6 +14,7 @@ const clientCredentials = {
 if (!firebase.apps.length) {
   const app = firebase.initializeApp(clientCredentials)
   if (typeof window !== 'undefined') {
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
     getAnalytics(app)
   }
 }

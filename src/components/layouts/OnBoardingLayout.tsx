@@ -13,8 +13,8 @@ const OnboardingLayout: React.FC = ({ children }) => {
   const router = useRouter()
   // const { form } = useOnBoardingContext()
   const onBoardingPages = [
-    { name: 'Account Type', path: '/onboarding' },
-    { name: 'Personal info', path: '/onboarding/personal-info' }
+    { name: 'Personal info', path: '/onboarding' },
+    { name: 'Account Type', path: '/onboarding/acc-type' }
   ]
   const currPath = router.pathname
   return (
