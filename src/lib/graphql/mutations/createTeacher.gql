@@ -1,0 +1,91 @@
+# Write your query or mutation here
+mutation CreateTeacherUser($input: UserInput!) {
+  createUser(data: $input) {
+    _id
+    uid
+    displayName
+    email
+    phoneNumber
+    photoURL
+    accType
+    teacherEducation {
+      institutions
+      preferredTeachingSubject
+      certifications {
+        name
+        description
+      }
+      yearsOfExperience
+      references
+    }
+    preferredInstructionMode {
+      instructionMode
+      remote {
+        preferredSchedule {
+          Monday {
+            start
+            end
+          }
+          Tuesday {
+            start
+            end
+          }
+          Wednesday {
+            start
+            end
+          }
+          Thursday {
+            start
+            end
+          }
+          Friday {
+            start
+            end
+          }
+          Saturday {
+            start
+            end
+          }
+          Sunday {
+            start
+            end
+          }
+        }
+      }
+      inPerson {
+        preferredSchedule {
+          Monday {
+            start
+            end
+          }
+          Tuesday {
+            start
+            end
+          }
+          Wednesday {
+            start
+            end
+          }
+          Thursday {
+            start
+            end
+          }
+          Friday {
+            start
+            end
+          }
+          Saturday {
+            start
+            end
+          }
+          Sunday {
+            start
+            end
+          }
+        }
+        preferredLocation
+        maxTravelDistance
+      }
+    }
+  }
+}

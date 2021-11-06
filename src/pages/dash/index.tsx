@@ -1,34 +1,27 @@
+import { Button } from 'components/custom'
 import { useAuth } from 'lib/context/auth'
+import { withPageAuthFromDash } from 'lib/middleware/pageMiddleware'
+import { GetServerSidePropsContext } from 'next'
+import { useRouter } from 'next/router'
 
 const Dash = () => {
   //   const router = useRouter()
-  const { user } = useAuth()
-  //   const handleClick = async () => {
-  //     const response: any = await axios.get('http://localhost:5000/auth/checkauth', {
-  //       withCredentials: true,
-  //       headers: {
-  //         'Access-Control-Allow-Origin': ' *'
-  //       }
-  //     })
-  //   }
+  const { user, signout } = useAuth()
+  const router = useRouter()
+  const handleSignOut = async () => {
+    router.push('/')
+    signout()
+  }
 
-  return <div>{JSON.stringify(user)} </div>
+  return (
+    <div>
+      <pre>{JSON.stringify(user, null, 2)}</pre> <Button onClick={handleSignOut}>SignOut</Button>
+    </div>
+  )
 }
 
-// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-//   const response: any = await axios.get('http://localhost:5000/auth/checkauth')
-//   const user = response.data
-//   console.log(user)
-//   if (!user) {
-//     res.writeHead(307, { Location: '/error' })
-//     res.end()
-//     return { props: {} }
-//   }
-//   return {
-//     props: {
-//       user
-//     }
-//   }
-// }
+export const getServerSideProps = withPageAuthFromDash((ctx: GetServerSidePropsContext) => {
+  return { props: {} }
+})
 
 export default Dash

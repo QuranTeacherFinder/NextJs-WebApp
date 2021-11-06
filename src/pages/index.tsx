@@ -2,6 +2,8 @@ import { Hero, Features, MainFeatures, Pricing, Testimonials, FAQ, GetStarted } 
 import LandingLayout from 'components/layouts/LandingLayout'
 import { LandingPageDetails } from 'public/LandingDeatils'
 import Head from 'next/head'
+import { withPageAuthToDash } from 'lib/middleware/pageMiddleware'
+import { GetServerSidePropsContext } from 'next'
 
 const Home = () => {
   return (
@@ -21,6 +23,11 @@ const Home = () => {
     </>
   )
 }
+
+export const getServerSideProps = withPageAuthToDash((ctx: GetServerSidePropsContext) => {
+  return { props: {} }
+})
+
 Home.getLayout = LandingLayout
 
 export default Home

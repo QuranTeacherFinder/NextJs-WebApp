@@ -1,0 +1,187 @@
+directive @embedded on OBJECT
+directive @collection(name: String!) on OBJECT
+directive @index(name: String!) on FIELD_DEFINITION
+directive @resolver(name: String, paginated: Boolean! = false) on FIELD_DEFINITION
+directive @relation(name: String) on FIELD_DEFINITION
+directive @unique(index: String) on FIELD_DEFINITION
+type Certifications {
+  name: String
+  description: String
+}
+
+input CertificationsInput {
+  name: String
+  description: String
+}
+
+type Children {
+  name: String
+  age: Int
+  previousEducation: PreviousEducation
+}
+
+input ChildrenInput {
+  name: String
+  age: Int
+  previousEducation: PreviousEducationInput
+}
+
+type DailyTimings {
+  start: Time
+  end: Time
+}
+
+input DailyTimingsInput {
+  start: Time
+  end: Time
+}
+
+scalar Date
+
+enum ExperienceLevel {
+  Beginner
+  Intermediate
+  Advanced
+}
+
+enum InstructionMode {
+  Remote
+  InPerson
+}
+
+scalar Long
+
+type Mutation {
+  createUser(data: UserInput!): User!
+  updateUser(id: ID!, data: UserInput!): User
+  deleteUser(id: ID!): User
+}
+
+type PreferredInPersonOptions {
+  preferredSchedule: WeeklySchedule
+  preferredLocation: String
+  maxTravelDistance: Int
+}
+
+input PreferredInPersonOptionsInput {
+  preferredSchedule: WeeklyScheduleInput
+  preferredLocation: String
+  maxTravelDistance: Int
+}
+
+type PreferredInstructionMode {
+  instructionMode: [InstructionMode]
+  remote: PreferredRemoteOptions
+  inPerson: PreferredInPersonOptions
+}
+
+input PreferredInstructionModeInput {
+  instructionMode: [InstructionMode]
+  remote: PreferredRemoteOptionsInput
+  inPerson: PreferredInPersonOptionsInput
+}
+
+type PreferredRemoteOptions {
+  preferredSchedule: WeeklySchedule
+}
+
+input PreferredRemoteOptionsInput {
+  preferredSchedule: WeeklyScheduleInput
+}
+
+type PreviousEducation {
+  subject: subjectType
+  juzMemorized: Int
+  readingLevel: ExperienceLevel
+  tajweedLevel: ExperienceLevel
+}
+
+input PreviousEducationInput {
+  subject: subjectType
+  juzMemorized: Int
+  readingLevel: ExperienceLevel
+  tajweedLevel: ExperienceLevel
+}
+
+type Query {
+  findUserByID(id: ID!): User
+  findUserByUID(uid: ID!): User
+}
+
+enum subjectType {
+  Qida
+  Reading
+  Hifz
+}
+
+type TeacherEducation {
+  institutions: [String]
+  preferredTeachingSubject: [subjectType]
+  certifications: Certifications
+  references: [String]
+  yearsOfExperience: Int
+}
+
+input TeacherEducationInput {
+  yearsOfExperience: Int
+  certifications: CertificationsInput
+  institutions: [String]
+  preferredTeachingSubject: [subjectType]
+  references: [String]
+}
+
+scalar Time
+
+type User {
+  displayName: String
+  children: [Children]
+  phoneNumber: String
+  email: String
+  previousEducation: PreviousEducation
+  _id: ID!
+  teacherEducation: TeacherEducation
+  accType: userAccType
+  preferredInstructionMode: PreferredInstructionMode
+  photoURL: String
+  uid: ID
+  _ts: Long!
+}
+
+enum userAccType {
+  Teacher
+  Parent
+  Student
+}
+
+input UserInput {
+  uid: ID
+  displayName: String
+  email: String
+  phoneNumber: String
+  photoURL: String
+  accType: userAccType
+  teacherEducation: TeacherEducationInput
+  previousEducation: PreviousEducationInput
+  preferredInstructionMode: PreferredInstructionModeInput
+  children: [ChildrenInput]
+}
+
+type WeeklySchedule {
+  Wednesday: DailyTimings
+  Monday: DailyTimings
+  Saturday: DailyTimings
+  Thursday: DailyTimings
+  Tuesday: DailyTimings
+  Friday: DailyTimings
+  Sunday: DailyTimings
+}
+
+input WeeklyScheduleInput {
+  Monday: DailyTimingsInput
+  Tuesday: DailyTimingsInput
+  Wednesday: DailyTimingsInput
+  Thursday: DailyTimingsInput
+  Friday: DailyTimingsInput
+  Saturday: DailyTimingsInput
+  Sunday: DailyTimingsInput
+}

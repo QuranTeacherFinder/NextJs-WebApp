@@ -23,7 +23,7 @@ const Login = () => {
       <section className='flex-1 flex justify-center items-center gap-8'>
         <Button onClick={() => signinGoogle()}>Signup google</Button>
         {/* <Button onClick={() => signinFacebook()}>Signup facebook</Button> */}
-        {user && <pre className='text-sm'>{JSON.stringify(user.providerData, null, 2)}</pre>}
+        {user && <pre className='text-sm'>{JSON.stringify(user, null, 2)}</pre>}
       </section>
       <Link to='/onboarding/acc-type' className='self-center'>
         <BiRightArrowAlt className='w-14 h-14 text-primary'></BiRightArrowAlt>

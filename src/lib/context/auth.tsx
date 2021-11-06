@@ -3,10 +3,12 @@ import firebase from 'lib/clients/firebase'
 import { GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth'
 import nookies from 'nookies'
 import { faunaClient } from 'lib/clients/fauna'
-import { Collection, Get } from 'faunadb'
+import { Get, Index, Match } from 'faunadb'
+import { User } from 'lib/graphql/generated'
+import { faunaRes } from 'lib/models/faunaRes'
 
 interface userContext {
-  user: firebase.User
+  user: User
   signinGoogle: () => Promise<firebase.auth.UserCredential | null>
   signinFacebook: () => Promise<firebase.auth.UserCredential | null>
   signout: () => Promise<void>
@@ -48,8 +50,9 @@ function useProvideAuth() {
     const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
         const token = await user.getIdToken()
-        // const dbUser = await faunaClient.query(Get(Collection('users'),))
-        setUser(user)
+        const dbUser: faunaRes<User> = await faunaClient.query(Get(Match(Index('findUserByUID'), user.uid)))
+        console.log(dbUser.data)
+        setUser(dbUser.data)
         nookies.set(undefined, 'firebaseAuthToken', token, { path: '/' })
       } else {
         setUser(false)

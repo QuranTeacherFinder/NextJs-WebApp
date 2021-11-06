@@ -1,0 +1,82 @@
+type User @collection(name: "users") {
+  uid: ID
+  displayName: String
+  email: String
+  phoneNumber: String
+  photoURL: String
+  accType: userAccType
+  teacherEducation: TeacherEducation
+  previousEducation: PreviousEducation
+  preferredInstructionMode: PreferredInstructionMode
+  children: [Children]
+}
+type Children @embedded {
+  name: String
+  age: Int
+  previousEducation: PreviousEducation
+}
+type PreferredInstructionMode @embedded {
+  instructionMode: [InstructionMode]
+  remote: PreferredRemoteOptions
+  inPerson: PreferredInPersonOptions
+}
+type PreferredRemoteOptions @embedded {
+  preferredSchedule: WeeklySchedule
+}
+type PreferredInPersonOptions @embedded {
+  preferredSchedule: WeeklySchedule
+  preferredLocation: String
+  maxTravelDistance: Int
+}
+type PreviousEducation @embedded {
+  subject: subjectType
+  juzMemorized: Int
+  readingLevel: ExperienceLevel
+  tajweedLevel: ExperienceLevel
+}
+type TeacherEducation @embedded {
+  yearsOfExperience: Int
+  certifications: Certifications
+  institutions: [String]
+  preferredTeachingSubject: [subjectType]
+  references: [String]
+}
+type Certifications @embedded {
+  name: String
+  description: String
+}
+type WeeklySchedule @embedded {
+  Monday: DailyTimings
+  Tuesday: DailyTimings
+  Wednesday: DailyTimings
+  Thursday: DailyTimings
+  Friday: DailyTimings
+  Saturday: DailyTimings
+  Sunday: DailyTimings
+}
+type DailyTimings @embedded {
+  start: Time
+  end: Time
+}
+enum InstructionMode {
+  Remote
+  InPerson
+}
+enum ExperienceLevel {
+  Beginner
+  Intermediate
+  Advanced
+}
+enum userAccType {
+  Teacher
+  Parent
+  Student
+}
+enum subjectType {
+  Qida
+  Reading
+  Hifz
+}
+type Query {
+  findUserByUID(uid: ID!): User
+}
